@@ -40,8 +40,20 @@
                                 { "data": "ShippedDate" },
                                 { "data": "PickupAddress" },
                                 { "data": "ShippingAddress" },
-                                { "data": "Weight" },
-                                { "data": "OrderValue" },
+                                {
+                                    "data": "Weight",
+                                    "render": function (data) {
+                                        data = data + " kg";
+                                        return data;
+                                    }
+                                },
+                                {
+                                    "data": "OrderValue",
+                                    "render": function (data) {
+                                        data = "₹ " + data;
+                                        return data;
+                                    }
+                                },
                                 { "data": "PaymentStatus" },
                                 { "data": "TrackingID" },
                                 { "data": "OrderStatus" }

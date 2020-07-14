@@ -49,11 +49,11 @@
                                 { "data": "ShippedDate" },
                                 {
                                     "data": "PickupAddress",
-                                    "width":"100px:"
+                                    "width":"50px:"
                                 },
                                 {
                                     "data": "ShippingAddress",
-                                    "width": "100px:"
+                                    "width": "50px:"
                                 },
                                 { "data": "Weight" },
                                 { "data": "OrderValue" },
@@ -97,7 +97,6 @@
                     url: form.action,
                     data: $(form).serialize(),
                     success: function (data) {
-                        alert(1);
                         if (data.success) {
                             popup.dialog('close');
                         }

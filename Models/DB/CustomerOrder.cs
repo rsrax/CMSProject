@@ -17,8 +17,8 @@ namespace CMSProject.Models.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CustomerOrder()
         {
-            this.Payments = new HashSet<Payment>();
-            this.Trackings = new HashSet<Tracking>();
+            this.PaymentTBLs = new HashSet<PaymentTBL>();
+            this.TrackingTBLs = new HashSet<TrackingTBL>();
         }
     
         public int OrderID { get; set; }
@@ -32,10 +32,10 @@ namespace CMSProject.Models.DB
     
         public virtual Address Address { get; set; }
         public virtual Address Address1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Payment> Payments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tracking> Trackings { get; set; }
         public virtual CustomerUser CustomerUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaymentTBL> PaymentTBLs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TrackingTBL> TrackingTBLs { get; set; }
     }
 }

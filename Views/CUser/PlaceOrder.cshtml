@@ -17,8 +17,11 @@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control", @onchange = "Calculate()" } })
+                    <div class="input-group col-md-10">
+                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control", @onkeyup = "Calculate()" } })
+                        <div class="input-group-append">
+                            <span class="input-group-text">kg</span>
+                        </div>
                         @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -32,9 +35,18 @@
                 </div>
 
                 <div class="form-group">
+                    @Html.LabelFor(model => model.PickupAddressPincode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PickupAddressPincode, new { htmlAttributes = new { @class = "form-control", @onkeyup = "Calculate()" } })
+                        @Html.ValidationMessageFor(model => model.PickupAddressPincode, "", new { @class = "text-danger" })
+                        <span class="text-danger" id="pmessage"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     @Html.LabelFor(model => model.PickupAddressCity, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.PickupAddressCity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.PickupAddressCity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(model => model.PickupAddressCity, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -42,16 +54,8 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.PickupAddressState, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.PickupAddressState, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.PickupAddressState, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(model => model.PickupAddressState, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.PickupAddressPincode, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.PickupAddressPincode, new { htmlAttributes = new { @class = "form-control", @onchange = "Calculate()" } })
-                        @Html.ValidationMessageFor(model => model.PickupAddressPincode, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -64,9 +68,18 @@
                 </div>
 
                 <div class="form-group">
+                    @Html.LabelFor(model => model.ShippingAddressPincode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ShippingAddressPincode, new { htmlAttributes = new { @class = "form-control", @onkeyup = "Calculate()" } })
+                        @Html.ValidationMessageFor(model => model.ShippingAddressPincode, "", new { @class = "text-danger" })
+                        <span class="text-danger" id="smessage"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     @Html.LabelFor(model => model.ShippingAddressCity, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.ShippingAddressCity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.ShippingAddressCity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(model => model.ShippingAddressCity, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -74,24 +87,25 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.ShippingAddressState, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.ShippingAddressState, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.ShippingAddressState, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                         @Html.ValidationMessageFor(model => model.ShippingAddressState, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ShippingAddressPincode, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ShippingAddressPincode, new { htmlAttributes = new { @class = "form-control", @onchange = "Calculate()" } })
-                        @Html.ValidationMessageFor(model => model.ShippingAddressPincode, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
                     @Html.LabelFor(model => model.OrderValue, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.OrderValue, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    <div class="form-group">
+                        <div class="input-group col-md-10 mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">₹</span>
+                            </div>
+                            @Html.EditorFor(model => model.OrderValue, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            <div class="input-group-append">
+                                <span class="input-group-text">.00</span>
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
 
                 <div class="form-group">
@@ -109,13 +123,75 @@
 </div>
 <script>
     function Calculate() {
+        var pat1 = /^\d{6}$/;
         var weight = $('#Weight').val();
         var pin1 = $('#PickupAddressPincode').val();
         var pin2 = $('#ShippingAddressPincode').val();
         var diff = pin1 < pin2 ? (pin2 - pin1) : (pin1 - pin2);
         var odv = (weight * diff / 225) + 40;
-        if (weight != 0 && pin1 != 0 && pin2 != 0) {
-            $("#OrderValue").val(Math.round(odv));
+        if (pat1.test(pin1)) {
+            $.ajax({
+                url: "https://zip.getziptastic.com/v2/IN/" + pin1,
+                cache: false,
+                dataType: "json",
+                type: "GET",
+                success: function (result, success) {
+                    $("#pmessage").html("");
+                    $("#PickupAddressCity").val(result.county);
+
+                    $("#PickupAddressState").val(result.state);
+
+                },
+                error: function (result, success) {
+
+                    $("#pmessage").html("Incorrect Pincode");
+
+                }
+
+            });
+        }
+        else {
+            $("#pmessage").html("");
+
+            $("#PickupAddressCity").val("");
+
+            $("#PickupAddressState").val("");
+        }
+
+        if (pat1.test(pin2)) {
+            $.ajax({
+                url: "https://zip.getziptastic.com/v2/IN/" + pin2,
+                cache: false,
+                dataType: "json",
+                type: "GET",
+                success: function (result, success) {
+                    $("#smessage").html("");
+                    $("#ShippingAddressCity").val(result.county);
+
+                    $("#ShippingAddressState").val(result.state);
+                },
+                error: function (result, success) {
+                    $("#smessage").html("Incorrect Pincode");
+                }
+
+            });
+        }
+        else {
+            $("#smessage").html("");
+
+            $("#ShippingAddressCity").val("");
+
+            $("#ShippingAddressState").val("");
+        }
+
+        if (pat1.test(pin1) && pat1.test(pin2)) {
+
+            if (weight != 0 && pin1 != 0 && pin2 != 0) {
+                $("#OrderValue").val(Math.round(odv));
+            }
+        }
+        else {
+            $("#OrderValue").val(null);
         }
     };
 </script>

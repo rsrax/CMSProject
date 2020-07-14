@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using CMSProject.Models.DB;
 using CMSProject.Models.ViewModel;
 
@@ -36,6 +37,7 @@ namespace CMSProject.Models.EntityManager
 
                 CustomerUser CU = new CustomerUser();
                 CU.UserID = U.UserID;
+                CU.Active = true;
                 db.CustomerUsers.Add(CU);
                 db.SaveChanges();
             }
@@ -152,25 +154,22 @@ namespace CMSProject.Models.EntityManager
                     UPV.UserID = u.UserID;
                     UPV.Username = u.Username;
                     UPV.Password = u.Password;
-                    var UP = db.UserProfiles.Find(u.UserID);
-                    if (UP != null)
-                    {
-                        UPV.UserProfileID = UP.UserProfileID;
-                        UPV.FirstName = UP.FirstName;
-                        UPV.LastName = UP.LastName;
-                        UPV.Gender = UP.Gender;
-                        UPV.BirthDate = Convert.ToDateTime(UP.BirthDate).ToString("yyyy-MM-dd");
-                        UPV.Mobile = UP.Mobile;
-                        UPV.Email = UP.Email;
-                    }
-                    var SUR = db.UserRoles.Where(o => o.RoleID.Equals(UP.RoleID));
-                    if (SUR.Any())
-                    {
-                        var userRole = SUR.FirstOrDefault();
-                        UPV.RoleID = userRole.RoleID;
-                        UPV.RoleName = userRole.RoleName;
-                    }
-                    if (UPV.RoleName.Equals("Employee"))
+                    
+                    
+                    var UP = db.UserProfiles.Where(o => o.UserID.Equals(UPV.UserID)).FirstOrDefault();
+                    UPV.UserProfileID = UP.UserProfileID;
+                    UPV.FirstName = UP.FirstName;
+                    UPV.LastName = UP.LastName;
+                    UPV.Gender = UP.Gender;
+                    UPV.BirthDate = Convert.ToDateTime(UP.BirthDate).ToString("yyyy-MM-dd");
+                    UPV.Mobile = UP.Mobile;
+                    UPV.Email = UP.Email;
+                    UPV.RoleID = UP.RoleID;
+
+
+                    var uRole = db.UserRoles.Where(o => o.RoleID.Equals(UPV.RoleID)).FirstOrDefault();
+                    UPV.RoleName = uRole.RoleName;
+                    if (UPV.RoleName == "Employee")
                         profiles.Add(UPV);
                 }
             }
@@ -190,28 +189,22 @@ namespace CMSProject.Models.EntityManager
                     CPV.UserID = u.UserID;
                     CPV.Username = u.Username;
                     CPV.Password = u.Password;
-                    var UP = db.UserProfiles.Find(u.UserID);
-                    if (UP != null)
+                    var UP = db.UserProfiles.Where(o => o.UserID.Equals(CPV.UserID)).FirstOrDefault();
+                    CPV.UserProfileID = UP.UserProfileID;
+                    CPV.FirstName = UP.FirstName;
+                    CPV.LastName = UP.LastName;
+                    CPV.Gender = UP.Gender;
+                    CPV.BirthDate = Convert.ToDateTime(UP.BirthDate).ToString("yyyy-MM-dd");
+                    CPV.Mobile = UP.Mobile;
+                    CPV.Email = UP.Email;
+                    CPV.RoleID = UP.RoleID;
+
+
+                    var uRole = db.UserRoles.Where(o => o.RoleID.Equals(CPV.RoleID)).FirstOrDefault();
+                    CPV.RoleName = uRole.RoleName;
+                    if (CPV.RoleName == "Customer")
                     {
-                        CPV.UserProfileID = UP.UserProfileID;
-                        CPV.FirstName = UP.FirstName;
-                        CPV.LastName = UP.LastName;
-                        CPV.Gender = UP.Gender;
-                        CPV.BirthDate = Convert.ToDateTime(UP.BirthDate).ToString("yyyy-MM-dd");
-                        CPV.Mobile = UP.Mobile;
-                        CPV.Email = UP.Email;
-                    }
-                    var SUR = db.UserRoles.Where(o => o.RoleID.Equals(UP.RoleID));
-                    if (SUR.Any())
-                    {
-                        var userRole = SUR.FirstOrDefault();
-                        CPV.RoleID = userRole.RoleID;
-                        CPV.RoleName = userRole.RoleName;
-                    }
-                    if (CPV.RoleName.Equals("Customer"))
-                    {
-                        var CU = db.CustomerUsers.Where(o => o.UserID.Equals(CPV.UserID)).FirstOrDefault();
-                        CPV.Active = CU.Active;
+                        CPV.Active = db.CustomerUsers.Where(o => o.UserID.Equals(CPV.UserID)).FirstOrDefault().Active;
                         profiles.Add(CPV);
                     }
                 }
@@ -252,6 +245,63 @@ namespace CMSProject.Models.EntityManager
                 UP.RoleID = user.RoleID;
                 db.Entry(UP).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+            }
+        }
+
+        public ProfileView ViewProfile()
+        {
+            var username = HttpContext.Current.User.Identity.Name;
+            var userid = GetUserID(username);
+            using(CMSProjectEntities db = new CMSProjectEntities())
+            {
+                ProfileView PV = new ProfileView();
+                var user = db.Users.Where(o => o.UserID.Equals(userid)).FirstOrDefault();
+                var userprofile = db.UserProfiles.Where(o => o.UserID.Equals(userid)).FirstOrDefault();
+
+                //User
+                PV.UserID = user.UserID;
+                PV.Username = user.Username;
+                PV.Password = user.Password;
+
+                //UserProfile
+                PV.UserProfileID = userprofile.UserProfileID;
+                PV.UserID = userprofile.UserID;
+                PV.FirstName = userprofile.FirstName;
+                PV.LastName = userprofile.LastName;
+                PV.Gender = userprofile.Gender;
+                PV.BirthDate = userprofile.BirthDate;
+                PV.Email = userprofile.Email;
+                PV.Mobile = userprofile.Mobile;
+                PV.RoleID = userprofile.RoleID;
+                return PV;
+            }
+        }
+
+        public void UpdateProfile(ProfileView PV)
+        {
+            using(CMSProjectEntities db = new CMSProjectEntities())
+            {
+                User user = new User();
+                user.UserID = PV.UserID;
+                user.Username = PV.Username;
+                user.Password = PV.Password;
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                UserProfile UP = new UserProfile();
+                UP.UserProfileID = PV.UserProfileID;
+                UP.UserID = PV.UserID;
+                UP.RoleID = PV.RoleID;
+                UP.FirstName = PV.FirstName;
+                UP.LastName = PV.LastName;
+                UP.Gender = PV.Gender;
+                UP.BirthDate = Convert.ToDateTime(PV.BirthDate);
+                UP.Email = PV.Email;
+                UP.Mobile = PV.Mobile;
+                db.Entry(UP).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                FormsAuthentication.SetAuthCookie(PV.Username, false);
             }
         }
     }

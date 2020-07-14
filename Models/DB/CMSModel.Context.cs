@@ -33,15 +33,11 @@ namespace CMSProject.Models.DB
         public virtual DbSet<CustomerUser> CustomerUsers { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<OrderStatusLookup> OrderStatusLookups { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentStatusLookup> PaymentStatusLookups { get; set; }
-        public virtual DbSet<Tracking> Trackings { get; set; }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
-        public System.Data.Entity.DbSet<CMSProject.Models.ViewModel.ComplaintView> ComplaintViews { get; set; }
-
-        public System.Data.Entity.DbSet<CMSProject.Models.ViewModel.OrdersView> OrdersViews { get; set; }
+        public virtual DbSet<PaymentTBL> PaymentTBLs { get; set; }
+        public virtual DbSet<TrackingTBL> TrackingTBLs { get; set; }
     }
 }

@@ -32,19 +32,63 @@ namespace CMSProject.Controllers
             }
         }
 
-        /*[HttpPost]
-        public JsonResult CheckUsername(string username, string id)
+        [HttpPost]
+        public JsonResult CheckUsername(string username, string email, string id)
         {
             int userid = Convert.ToInt32(id);
-            //CMSProjectEntities entities = new CMSProjectEntities();
-            //bool isValid = !entities.Users.ToList().Exists(p => p.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase));
-            bool isValid;
-            if (userid == 0)
-                isValid = true;
-            else
-                isValid = false;
+            int isValid;
+            using (CMSProjectEntities db = new CMSProjectEntities())
+            {
+                List<User> userlist = db.Users.ToList();
+                List<UserProfile> profilelist = db.UserProfiles.ToList();
+                var check  = userlist.Where(o => o.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase));
+                var checke = profilelist.Where(o => o.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase));
+                if (check.Any())
+                {
+                    if (check.FirstOrDefault().UserID == userid)
+                    {
+                        if (checke.Any())
+                        {
+                            if (checke.FirstOrDefault().UserID == userid)
+                            {
+                                isValid = 1;
+                            }
+                            else
+                            {
+                                isValid = 3;
+                            }
+                        }
+                        else
+                        {
+                            isValid = 1;
+                        }
+                    }
+                    else
+                    {
+                        isValid = 2;
+                    }
+                }
+                else
+                {
+                    if (checke.Any())
+                    {
+                        if (checke.FirstOrDefault().UserID == userid)
+                        {
+                            isValid = 1;
+                        }
+                        else
+                        {
+                            isValid = 3;
+                        }
+                    }
+                    else
+                    {
+                        isValid = 1;
+                    }
+                }
+            }
             return Json(isValid);
-        }*/
+        }
 
         [HttpGet]
         public ActionResult SignUp()
@@ -122,6 +166,33 @@ namespace CMSProject.Controllers
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public ActionResult UProfile()
+        {
+            UserManager UM = new UserManager();
+            ProfileView PV = new ProfileView();
+            PV = UM.ViewProfile();
+            return View(PV);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult UProfile(ProfileView PV)
+        {
+            UserManager UM = new UserManager();
+            UM.UpdateProfile(PV);
+            return Json(new { success = true, message = "Updated Successfully!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public ActionResult MyProfile()
+        {
+            UserManager UM = new UserManager();
+            ProfileView PV = new ProfileView();
+            PV = UM.ViewProfile();
+            return View(PV);
         }
     }
 }

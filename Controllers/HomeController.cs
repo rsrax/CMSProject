@@ -21,5 +21,26 @@ namespace CMSProject.Controllers
         {
             return View();
         }
+
+        public ActionResult Features()
+        {
+            return View();
+        }
+
+        public ActionResult Services()
+        {
+            return View();
+        }
+
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
+        [HandleError]
+        public ActionResult err404()
+        {
+            return View();
+        }
     }
 }

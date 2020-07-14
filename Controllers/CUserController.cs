@@ -124,5 +124,15 @@ namespace CMSProject.Controllers
                 return View(order);
             }
         }
+
+        public ActionResult Invoice(int id=0)
+        {
+            List<OrdersView> MyOrders = new List<OrdersView>();
+            DataManager DM = new DataManager();
+            MyOrders = DM.GetOrdersViews();
+            OrdersView CurrOrder = new OrdersView();
+            CurrOrder = MyOrders.Where(o => o.OrderID.Equals(id)).FirstOrDefault();
+            return View(CurrOrder);
+        }
     }
 }

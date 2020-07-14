@@ -70,7 +70,10 @@ namespace CMSProject.Models.EntityManager
                     ordersView.OrderID = order.OrderID;
                     ordersView.CustomerID = order.CustomerID;
                     ordersView.OrderDate = order.OrderDate.ToString("yyyy-MM-dd");
-                    ordersView.ShippedDate = order.ShippedDate.ToString();
+                    if (order.ShippedDate.HasValue)
+                        ordersView.ShippedDate = order.ShippedDate.GetValueOrDefault().ToString("yyyy-MM-dd");
+                    else
+                        ordersView.ShippedDate = null;
                     ordersView.PickupAddressID = order.PickupAddressID;
                     ordersView.ShippingAddressID = order.ShippingAddressID;
                     ordersView.Weight = (float)order.Weight;
@@ -82,11 +85,11 @@ namespace CMSProject.Models.EntityManager
                     ordersView.PickupAddress = paddr.StreetAddress + ", " + paddr.City + ", " + paddr.State + " - " + paddr.Pincode;
                     var saddr = db.Addresses.Where(o => o.AddressID.Equals(ordersView.ShippingAddressID)).FirstOrDefault();
                     ordersView.ShippingAddress = saddr.StreetAddress + ", " + saddr.City + ", " + saddr.State + " - " + saddr.Pincode;
-                    ordersView.TrackingID = db.Trackings.Where(o => o.OrderID.Equals(ordersView.OrderID)).FirstOrDefault().TrackingID;
-                    ordersView.OrderStatusID = db.Trackings.Where(o => o.TrackingID.Equals(ordersView.TrackingID)).FirstOrDefault().OrderStatusID;
+                    ordersView.TrackingID = db.TrackingTBLs.Where(o => o.OrderID.Equals(ordersView.OrderID)).FirstOrDefault().TrackingID;
+                    ordersView.OrderStatusID = db.TrackingTBLs.Where(o => o.TrackingID.Equals(ordersView.TrackingID)).FirstOrDefault().OrderStatusID;
                     ordersView.OrderStatus = db.OrderStatusLookups.Where(o => o.OrderStatusID.Equals(ordersView.OrderStatusID)).FirstOrDefault().Status;
-                    ordersView.PaymentID = db.Payments.Where(o => o.OrderID.Equals(ordersView.OrderID)).FirstOrDefault().PaymentID;
-                    ordersView.PaymentStatusID = db.Payments.Where(o => o.PaymentID.Equals(ordersView.PaymentID)).FirstOrDefault().PaymentStatusID;
+                    ordersView.PaymentID = db.PaymentTBLs.Where(o => o.OrderID.Equals(ordersView.OrderID)).FirstOrDefault().PaymentID;
+                    ordersView.PaymentStatusID = db.PaymentTBLs.Where(o => o.PaymentID.Equals(ordersView.PaymentID)).FirstOrDefault().PaymentStatusID;
                     ordersView.PaymentStatus = db.PaymentStatusLookups.Where(o => o.PaymentStatusID.Equals(ordersView.PaymentStatusID)).FirstOrDefault().Status;
                     OV.Add(ordersView);
                 }
@@ -138,8 +141,8 @@ namespace CMSProject.Models.EntityManager
             List<PaymentDetailsView> paymentDetails = new List<PaymentDetailsView>();
             using (CMSProjectEntities db = new CMSProjectEntities())
             {
-                var payments = db.Payments.ToList();
-                foreach (Payment payment in payments)
+                var payments = db.PaymentTBLs.ToList();
+                foreach (PaymentTBL payment in payments)
                 {
                     PaymentDetailsView PV = new PaymentDetailsView();
                     PV.PaymentID = payment.PaymentID;
@@ -158,8 +161,8 @@ namespace CMSProject.Models.EntityManager
             List<TrackingDetailsView> trackingDetails = new List<TrackingDetailsView>();
             using (CMSProjectEntities db = new CMSProjectEntities())
             {
-                var tracks = db.Trackings.ToList();
-                foreach (Tracking track in tracks)
+                var tracks = db.TrackingTBLs.ToList();
+                foreach (TrackingTBL track in tracks)
                 {
                     TrackingDetailsView TV = new TrackingDetailsView();
                     TV.TrackingID = track.TrackingID;
@@ -276,19 +279,20 @@ namespace CMSProject.Models.EntityManager
                 CO.Weight = POV.Weight;
                 CO.OrderValue = POV.OrderValue;
                 db.CustomerOrders.Add(CO);
+                db.SaveChanges();
 
-                Payment pay = new Payment();
+                TrackingTBL tracking = new TrackingTBL();
+                tracking.OrderStatusID = 0;
+                tracking.OrderID = CO.OrderID;
+                db.TrackingTBLs.Add(tracking);
+                db.SaveChanges();
+
+                PaymentTBL pay = new PaymentTBL();
                 pay.Value = CO.OrderValue;
                 pay.PaymentDate = null;
                 pay.PaymentStatusID = 1;
                 pay.OrderID = CO.OrderID;
-                db.Payments.Add(pay);
-                db.SaveChanges();
-
-                Tracking tracking = new Tracking();
-                tracking.OrderStatusID = 1;
-                tracking.OrderID = CO.OrderID;
-                db.Trackings.Add(tracking);
+                db.PaymentTBLs.Add(pay);
                 db.SaveChanges();
             }
         }
@@ -320,27 +324,37 @@ namespace CMSProject.Models.EntityManager
                 OrderUpdateView orders = new OrderUpdateView();
                 //Orders
                 orders.OrderID = order.OrderID;
-                orders.ShippedDate = order.ShippedDate;
+                orders.CustomerID = order.CustomerID;
+                orders.OrderDate = order.OrderDate;
+                if (order.ShippedDate.HasValue)
+                    orders.ShippedDate = order.ShippedDate.GetValueOrDefault();
+                else
+                    orders.ShippedDate = null;
                 orders.PickupAddressID = order.PickupAddressID;
                 orders.ShippingAddressID = order.ShippingAddressID;
+                orders.Weight = order.Weight;
+                orders.OrderValue = order.OrderValue;
 
                 //Tracking
-                orders.TrackingID = db.Trackings.Where(o => o.OrderID.Equals(orders.OrderID)).FirstOrDefault().TrackingID;
-                orders.PickupBranchID = db.Trackings.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().PickupBranchID.GetValueOrDefault();
-                orders.ShippingBranchID = db.Trackings.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().ShippingBranchID.GetValueOrDefault();
-                orders.OrderStatusID = db.Trackings.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().OrderStatusID;
+                orders.TrackingID = db.TrackingTBLs.Where(o => o.OrderID.Equals(orders.OrderID)).FirstOrDefault().TrackingID;
+                orders.PickupBranchID = db.TrackingTBLs.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().PickupBranchID.GetValueOrDefault();
+                orders.ShippingBranchID = db.TrackingTBLs.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().ShippingBranchID.GetValueOrDefault();
+                orders.OrderStatusID = db.TrackingTBLs.Where(o => o.TrackingID.Equals(orders.TrackingID)).FirstOrDefault().OrderStatusID;
 
                 //Payment
-                orders.PaymentID = db.Payments.Where(o => o.OrderID.Equals(orders.OrderID)).FirstOrDefault().PaymentID;
-                orders.PaymentDate = db.Payments.Where(o => o.PaymentID.Equals(orders.PaymentID)).FirstOrDefault().PaymentDate;
-                orders.PaymentStatusID = db.Payments.Where(o => o.PaymentID.Equals(orders.PaymentID)).FirstOrDefault().PaymentStatusID;
+                orders.PaymentID = db.PaymentTBLs.Where(o => o.OrderID.Equals(orders.OrderID)).FirstOrDefault().PaymentID;
+                if (db.PaymentTBLs.Where(o => o.PaymentID.Equals(orders.PaymentID)).FirstOrDefault().PaymentDate.HasValue)
+                    orders.PaymentDate = db.PaymentTBLs.Where(o => o.PaymentID.Equals(orders.PaymentID)).FirstOrDefault().PaymentDate.GetValueOrDefault();
+                else
+                    orders.PaymentDate = null;
+                orders.PaymentStatusID = db.PaymentTBLs.Where(o => o.PaymentID.Equals(orders.PaymentID)).FirstOrDefault().PaymentStatusID;
 
                 //Extras
                 var paddr = db.Addresses.Where(o => o.AddressID.Equals(orders.PickupAddressID)).FirstOrDefault();
                 orders.PickupAddress = paddr.StreetAddress + ", " + paddr.City + ", " + paddr.State + " - " + paddr.Pincode;
                 var saddr = db.Addresses.Where(o => o.AddressID.Equals(orders.ShippingAddressID)).FirstOrDefault();
                 orders.ShippingAddress = saddr.StreetAddress + ", " + saddr.City + ", " + saddr.State + " - " + saddr.Pincode;
-                orders.Branches = GetBranchesViews();
+                orders.Branches = GetActiveBranchesViews();
 
                 return orders;
             }
@@ -350,37 +364,98 @@ namespace CMSProject.Models.EntityManager
         {
             using(CMSProjectEntities db = new CMSProjectEntities())
             {
-                var Order = db.CustomerOrders.Where(o => o.OrderID.Equals(OUV.OrderID)).FirstOrDefault();
                 CustomerOrder CO = new CustomerOrder();
                 CO.OrderID = OUV.OrderID;
-                CO.CustomerID = Order.CustomerID;
-                CO.OrderDate = Order.OrderDate;
-                CO.ShippedDate = OUV.ShippedDate;
-                CO.PickupAddressID = Order.PickupAddressID;
-                CO.ShippingAddressID = Order.ShippingAddressID;
-                CO.Weight = Order.Weight;
-                CO.OrderValue = Order.OrderValue;
+                CO.CustomerID = OUV.CustomerID;
+                CO.OrderDate = OUV.OrderDate;
+                if(OUV.ShippedDate.HasValue)
+                {
+                    CO.ShippedDate = OUV.ShippedDate;
+                }
+                else
+                {
+                    CO.ShippedDate = null;
+                }
+                CO.PickupAddressID = OUV.PickupAddressID;
+                CO.ShippingAddressID = OUV.ShippingAddressID;
+                CO.Weight = OUV.Weight;
+                CO.OrderValue = OUV.OrderValue;
                 db.Entry(CO).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                Payment pay = new Payment();
+                PaymentTBL pay = new PaymentTBL();
                 pay.PaymentID = OUV.PaymentID;
                 pay.Value = CO.OrderValue;
-                pay.PaymentDate = OUV.PaymentDate;
+                if (OUV.PaymentDate.HasValue)
+                {
+                    pay.PaymentDate = OUV.PaymentDate;
+                }
+                else
+                {
+                    pay.PaymentDate = null;
+                }
                 pay.PaymentStatusID = OUV.PaymentStatusID;
                 pay.OrderID = CO.OrderID;
                 db.Entry(pay).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                Tracking tracking = new Tracking();
+                TrackingTBL tracking = new TrackingTBL();
                 tracking.TrackingID = OUV.TrackingID;
                 tracking.PickupBranchID = OUV.PickupBranchID;
                 tracking.ShippingBranchID = OUV.ShippingBranchID;
                 tracking.OrderStatusID = OUV.OrderStatusID;
                 tracking.OrderID = CO.OrderID;
-                db.Entry(CO).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(tracking).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
         }
+
+        public ComplaintView ViewComplaint(int id)
+        {
+            List<ComplaintView> complaints = GetComplaintViews();
+            ComplaintView CV = complaints.Where(o => o.ComplaintID.Equals(id)).FirstOrDefault();
+            return CV;
+        }
+
+        public List<BranchesView> GetActiveBranchesViews()
+        {
+            List<BranchesView> BV = new List<BranchesView>();
+            using (CMSProjectEntities db = new CMSProjectEntities())
+            {
+                var branchlist = db.BranchLists.ToList();
+                foreach (BranchList BL in branchlist)
+                {
+                    BranchesView branchesView = new BranchesView();
+                    branchesView.BranchID = BL.BranchID;
+                    branchesView.StreetAddress = BL.StreetAddress;
+                    branchesView.City = BL.City;
+                    branchesView.State = BL.State;
+                    branchesView.Pincode = BL.Pincode;
+                    branchesView.Active = BL.Active;
+                    if (branchesView.Active == true)
+                    { 
+                        BV.Add(branchesView);
+                    }
+                }
+            }
+            return (BV);
+        }
+
+        public void UpdateComplaint(ComplaintView CV)
+        {
+            using (CMSProjectEntities db = new CMSProjectEntities())
+            {
+                var emp = db.Users.Where(o => o.Username.Equals(HttpContext.Current.User.Identity.Name)).FirstOrDefault();
+                Complaint currComplaint = new Complaint();
+                currComplaint.ComplaintID = CV.ComplaintID;
+                currComplaint.CustomerID = CV.CustomerID;
+                currComplaint.Description = CV.Description;
+                currComplaint.ComplaintStatusID = CV.ComplaintStatusID;
+                currComplaint.EmployeeID = emp.UserID;
+                db.Entry(currComplaint).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
     }
 }

@@ -158,4 +158,52 @@ namespace CMSProject.Models.ViewModel
         [Key]
         public int BranchID { get; set; }
     }
+
+    public class ProfileView
+    {
+        //User
+        [Key]
+        public int UserID { get; set; }
+
+        [Display(Name = "Username:")]
+        [Required(ErrorMessage = "Username is required.")]
+        public string Username { get; set; }
+
+        [Display(Name = "Password:")]
+        [Required(ErrorMessage = "Password is required.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        //UserProfile
+        public int UserProfileID { get; set; }
+
+        [Display(Name = "First Name:")]
+        [Required(ErrorMessage = "First Name is required.")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name:")]
+        [Required(ErrorMessage = "Last Name is required.")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Gender:")]
+        [Required(ErrorMessage = "Gender is required.")]
+        public string Gender { get; set; }
+
+        [Display(Name = "Birthdate:")]
+        [Required(ErrorMessage = "Birthdate is required.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime BirthDate { get; set; }
+
+        [Display(Name = "Mobile Number:")]
+        [Required(ErrorMessage = "Mobile Number is required.")]
+        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Invalid Mobile Number.")]
+        public string Mobile { get; set; }
+
+        [Display(Name = "E-Mail:")]
+        [Required(ErrorMessage = "E-Mail is required.")]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        public int RoleID { get; set; }
+    }
 }

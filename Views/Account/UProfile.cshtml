@@ -1,0 +1,155 @@
+﻿@model CMSProject.Models.ViewModel.ProfileView
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card text-white bg-primary mb-3" style="max-width: 45rem; margin:auto">
+    <div class="card-header"><h4 class="text-white">Profile</h4></div>
+    <div class="card-body">
+        @using (Html.BeginForm("UProfile", "Account", FormMethod.Post, new { id = "profileform", onsubmit = "return beforeSubmitForm(this)" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.HiddenFor(model => model.UserID)
+                @Html.HiddenFor(model => model.UserProfileID)
+                @Html.HiddenFor(model => model.RoleID)
+                <hr />
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @onkeyup = "ClearMessage()" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                        <span id="umessage"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Gender, new List<SelectListItem> {
+                            new SelectListItem { Text="Male", Value="Male" },
+                            new SelectListItem { Text="Female", Value="Female" }
+                        }, "Select an Option", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.BirthDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @onkeyup = "ClearMessage()" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        <span id="emessage"></span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Update" class="btn btn-light" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    function beforeSubmitForm(form){
+            var username = $("#Username").val();
+            var userid = $("#UserID").val();
+            var email = $("#Email").val();
+            $.ajax({
+                type: "POST",
+                url: "/Account/CheckUsername/" + userid,
+                data: '{username: "' + username + '", email: "' + email + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var umessage = $("#umessage");
+                    var emessage = $("#emessage");
+                    if (response == 1) {
+                        SubmitForm(form);
+                    }
+                    else if (response == 2) {
+                        umessage.css("color", "red");
+                        umessage.html("Username is NOT available");
+                    }
+                    else {
+                        emessage.css("color", "red");
+                        emessage.html("Email is NOT available");
+                    }
+                }
+            });
+            return false;
+    };
+
+    function SubmitForm(form) {
+
+        $.ajax({
+            type: "POST",
+            url: form.action,
+            data: $(form).serialize(),
+            success: function (data) {
+                location.href = "@Url.Action("MyProfile","Account")";
+            }
+        })
+        return false;
+    }
+
+    function ClearMessage() {
+        $("#umessage").html("");
+        $("#emessage").html("");
+    };
+</script>

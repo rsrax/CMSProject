@@ -18,6 +18,7 @@ namespace CMSProject.Models.DB
         public User()
         {
             this.UserProfiles = new HashSet<UserProfile>();
+            this.CustomerUsers = new HashSet<CustomerUser>();
         }
     
         public int UserID { get; set; }
@@ -26,5 +27,7 @@ namespace CMSProject.Models.DB
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserProfile> UserProfiles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerUser> CustomerUsers { get; set; }
     }
 }

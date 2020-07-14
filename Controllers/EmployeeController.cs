@@ -43,6 +43,7 @@ namespace CMSProject.Controllers
             ov = DM.GetOrdersViews();
             return Json(new { data = ov }, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult UpdateOrders(int id=0)
         {
             OrderUpdateView OUV = new OrderUpdateView();
@@ -50,13 +51,34 @@ namespace CMSProject.Controllers
             OUV = DM.CreateOUView(id);
             return View(OUV);
         }
-
-
         [HttpPost]
         public ActionResult UpdateOrders(OrderUpdateView OUV)
         {
             DataManager DM = new DataManager();
             DM.UpdateOrder(OUV);
+            return Json(new { success = true, message = "Updated Successfully!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetComplaints()
+        {
+            DataManager DM = new DataManager();
+            List<ComplaintView> cv = new List<ComplaintView>();
+            cv = DM.GetComplaintViews();
+            return Json(new { data = cv }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateComplaint(int id=0)
+        {
+            DataManager DM = new DataManager();
+            ComplaintView CV = DM.ViewComplaint(id);
+            return View(CV);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateComplaint(ComplaintView CV)
+        {
+            DataManager DM = new DataManager();
+            DM.UpdateComplaint(CV);
             return Json(new { success = true, message = "Updated Successfully!" }, JsonRequestBehavior.AllowGet);
         }
     }

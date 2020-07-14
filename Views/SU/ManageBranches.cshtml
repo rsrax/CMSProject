@@ -66,6 +66,30 @@
                     });
                 });
         }
+
+        function beforeSubmitForm(form) {
+            var pin = $("#Pincode").val();
+            var id = $("#BranchID").val();
+            $.ajax({
+                type: "POST",
+                url: "/SU/CheckBranchExists/" + id,
+                data: '{pin: "' + pin + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var umessage = $("#message");
+                    if (response == true) {
+                        SubmitForm(form);
+                    }
+                    else {
+                        message.css("color", "red");
+                        message.html("Pincode already exists!");
+                    }
+                }
+            });
+            return false;
+        };
+
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form)
             if ($(form).valid()) {

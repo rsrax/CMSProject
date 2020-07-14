@@ -30,11 +30,22 @@
     function updateProgress() {
         var tStatus = $("#OrderStatusID").val();
         var trackStatus = document.getElementById("OrderStatus");
-        console.log(tStatus + " " + ((tStatus*1 + 1) * 16.67) + "%");
-        trackStatus.style.width = ((tStatus * 1 + 1) * 16.67) + "%";
+        if (tStatus < 6) {
+            trackStatus.style.width = ((tStatus * 1) * 20) + "%";
+        }
+        else {
+            trackStatus.style.width = 100 + "%";
+            trackStatus.classList.remove("bg-success");
+            trackStatus.classList.add("bg-warning");
+        }
         var pStatus = $("#PaymentStatusID").val();
         var payStatus = document.getElementById("PaymentStatus");
-        console.log(pStatus + " " + ((pStatus * 1) * 33.34) + "%");
-        payStatus.style.width = ((pStatus * 1) * 33.34) + "%";
-    } 
+        if (pStatus < 3)
+            payStatus.style.width = ((pStatus * 1) * 50) + "%";
+        else {
+            payStatus.style.width = 100 + "%";
+            payStatus.classList.remove("bg-success");
+            payStatus.classList.add("bg-warning");
+        }
+    }
 </script>

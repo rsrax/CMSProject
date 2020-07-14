@@ -94,28 +94,33 @@
                 });
         }
 
-        function CheckAvailability() {
+        function beforeSubmitForm(form) {
             var username = $("#Username").val();
             var userid = $("#UserID").val();
+            var email = $("#Email").val();
             $.ajax({
                 type: "POST",
                 url: "/Account/CheckUsername/" + userid,
-                data: '{username: "' + username + '"}',
+                data: '{username: "' + username + '", email: "' + email + '"}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    var message = $("#Message");
-                    if (response) {
-                        //Email available.
-                        return 1;
+                    var umessage = $("#umessage");
+                    var emessage = $("#emessage");
+                    if (response == 1) {
+                        SubmitForm(form);
+                    }
+                    else if (response == 2) {
+                        umessage.css("color", "red");
+                        umessage.html("Username is NOT available");
                     }
                     else {
-                        //Email not available.
-                        return 0;
+                        emessage.css("color", "red");
+                        emessage.html("Email is NOT available");
                     }
                 }
             });
-
+            return false;
         };
 
         function SubmitForm(form) {
@@ -139,6 +144,11 @@
             }
             return false;
         }
+
+        function ClearMessage() {
+            $("#umessage").html("");
+            $("#emessage").html("");
+        };
 
     </script>
 }

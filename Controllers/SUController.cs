@@ -230,5 +230,31 @@ namespace CMSProject.Controllers
                 return Json(new { success = true, message = "Updated Successfully!" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult CheckBranchExists(string pin, string id)
+        {
+            int bid = Convert.ToInt32(id);
+            using (CMSProjectEntities db = new CMSProjectEntities())
+            { 
+                List<BranchList> blist = new List<BranchList>();
+                blist = db.BranchLists.ToList();
+                if(blist.Where(o => o.Pincode.Equals(pin)).Any())
+                {
+                    var branch = blist.Where(o => o.Pincode.Equals(pin)).FirstOrDefault();
+                    if(branch.BranchID.Equals(bid))
+                    {
+                        return Json(true);
+                    }
+                    else
+                    {
+                        return Json(false);
+                    }
+                }
+                else
+                {
+                    return Json(true);
+                }
+            }
+        }
     }
 }

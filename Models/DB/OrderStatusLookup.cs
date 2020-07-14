@@ -17,13 +17,13 @@ namespace CMSProject.Models.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OrderStatusLookup()
         {
-            this.Trackings = new HashSet<Tracking>();
+            this.TrackingTBLs = new HashSet<TrackingTBL>();
         }
     
         public int OrderStatusID { get; set; }
         public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tracking> Trackings { get; set; }
+        public virtual ICollection<TrackingTBL> TrackingTBLs { get; set; }
     }
 }

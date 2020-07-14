@@ -1,0 +1,41 @@
+﻿@model CMSProject.Models.ViewModel.OrdersView
+@{
+    ViewBag.Title = "Invoice";
+    Layout = null;
+}
+<div class="text-center">
+    <h2>Invoice</h2>
+</div>
+
+<div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PickupAddress, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.PickupAddress, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShippingAddress, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.ShippingAddress, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderValue, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.OrderValue, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+</div>

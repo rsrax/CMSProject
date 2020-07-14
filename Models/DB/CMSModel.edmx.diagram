@@ -4,18 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="75ced285dd534dd8b953ab93c8809823" Name="Diagram1" ZoomLevel="84">
-        <EntityTypeShape EntityType="CMSModel.Address" Width="1.5" PointX="3.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.BranchList" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.Complaint" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.ComplaintStatusLookup" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+      <Diagram DiagramId="75ced285dd534dd8b953ab93c8809823" Name="Diagram1" ZoomLevel="40">
+        <EntityTypeShape EntityType="CMSModel.Address" Width="1.5" PointX="8.625" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.BranchList" Width="1.5" PointX="11.625" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.Complaint" Width="1.5" PointX="3.875" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ComplaintStatusLookup" Width="1.5" PointX="4.125" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="CMSModel.CustomerOrder" Width="1.5" PointX="6.125" PointY="5.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.CustomerUser" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.Feedback" Width="1.5" PointX="3" PointY="14.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.OrderStatusLookup" Width="1.5" PointX="9" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.Payment" Width="1.5" PointX="8.25" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.PaymentStatusLookup" Width="1.5" PointX="6" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CMSModel.Tracking" Width="1.5" PointX="11.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.CustomerUser" Width="1.5" PointX="4.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.Feedback" Width="1.5" PointX="4.25" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.OrderStatusLookup" Width="1.5" PointX="10.125" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.PaymentStatusLookup" Width="1.5" PointX="5.625" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CMSModel.UserProfile" Width="1.5" PointX="11" PointY="10" IsExpanded="true" />
         <EntityTypeShape EntityType="CMSModel.UserRole" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CMSModel.User" Width="1.5" PointX="8.75" PointY="13.625" IsExpanded="true" />
@@ -23,14 +21,17 @@
         <AssociationConnector Association="CMSModel.FK_ShippingAddressID" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_ComplaintStatusID" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_CustomerIDComplaint" ManuallyRouted="false" />
-        <AssociationConnector Association="CMSModel.FK__Payment__OrderID__66603565" ManuallyRouted="false" />
-        <AssociationConnector Association="CMSModel.FK__Tracking__OrderI__6754599E" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_CustomerID" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_CustomerIDFeedback" ManuallyRouted="false" />
-        <AssociationConnector Association="CMSModel.FK_TrackOrderStatusID" ManuallyRouted="false" />
-        <AssociationConnector Association="CMSModel.FK_PaymentStatusID" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_UserIDProfile" ManuallyRouted="false" />
         <AssociationConnector Association="CMSModel.FK_UserRoleID" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CMSModel.PaymentTBL" Width="1.5" PointX="8.875" PointY="0.75" />
+        <EntityTypeShape EntityType="CMSModel.TrackingTBL" Width="1.5" PointX="13.5" PointY="4.25" />
+        <AssociationConnector Association="CMSModel.FK_TrackOrderStatusID1" />
+        <AssociationConnector Association="CMSModel.FK_PaymentStatusID1" />
+        <AssociationConnector Association="CMSModel.FK_PaymentOrderID" />
+        <AssociationConnector Association="CMSModel.FK_TrackingOrderID" />
+        <AssociationConnector Association="CMSModel.FK__CustomerU__UserI__76969D2E" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

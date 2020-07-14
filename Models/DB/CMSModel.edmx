@@ -79,7 +79,14 @@
           <Property Name="OrderStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Payment">
+        <EntityType Name="PaymentStatusLookup">
+          <Key>
+            <PropertyRef Name="PaymentStatusID" />
+          </Key>
+          <Property Name="PaymentStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentTBL">
           <Key>
             <PropertyRef Name="PaymentID" />
           </Key>
@@ -89,14 +96,7 @@
           <Property Name="PaymentStatusID" Type="int" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="PaymentStatusLookup">
-          <Key>
-            <PropertyRef Name="PaymentStatusID" />
-          </Key>
-          <Property Name="PaymentStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Tracking">
+        <EntityType Name="TrackingTBL">
           <Key>
             <PropertyRef Name="TrackingID" />
           </Key>
@@ -135,27 +135,15 @@
           <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Payment__OrderID__66603565">
-          <End Role="CustomerOrders" Type="Self.CustomerOrders" Multiplicity="1" />
-          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+        <Association Name="FK__CustomerU__UserI__76969D2E">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CustomerOrders">
-              <PropertyRef Name="OrderID" />
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
             </Principal>
-            <Dependent Role="Payment">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Tracking__OrderI__6754599E">
-          <End Role="CustomerOrders" Type="Self.CustomerOrders" Multiplicity="1" />
-          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerOrders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="Tracking">
-              <PropertyRef Name="OrderID" />
+            <Dependent Role="CustomerUser">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -207,14 +195,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PaymentOrderID">
+          <End Role="CustomerOrders" Type="Self.CustomerOrders" Multiplicity="1" />
+          <End Role="PaymentTBL" Type="Self.PaymentTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="PaymentTBL">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PaymentStatusID">
           <End Role="PaymentStatusLookup" Type="Self.PaymentStatusLookup" Multiplicity="1" />
-          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <End Role="PaymentTBL" Type="Self.PaymentTBL" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PaymentStatusLookup">
               <PropertyRef Name="PaymentStatusID" />
             </Principal>
-            <Dependent Role="Payment">
+            <Dependent Role="PaymentTBL">
               <PropertyRef Name="PaymentStatusID" />
             </Dependent>
           </ReferentialConstraint>
@@ -243,14 +243,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TrackingOrderID">
+          <End Role="CustomerOrders" Type="Self.CustomerOrders" Multiplicity="1" />
+          <End Role="TrackingTBL" Type="Self.TrackingTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="TrackingTBL">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TrackOrderStatusID">
           <End Role="OrderStatusLookup" Type="Self.OrderStatusLookup" Multiplicity="1" />
-          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
+          <End Role="TrackingTBL" Type="Self.TrackingTBL" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrderStatusLookup">
               <PropertyRef Name="OrderStatusID" />
             </Principal>
-            <Dependent Role="Tracking">
+            <Dependent Role="TrackingTBL">
               <PropertyRef Name="OrderStatusID" />
             </Dependent>
           </ReferentialConstraint>
@@ -288,19 +300,15 @@
           <EntitySet Name="CustomerUser" EntityType="Self.CustomerUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderStatusLookup" EntityType="Self.OrderStatusLookup" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentStatusLookup" EntityType="Self.PaymentStatusLookup" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Tracking" EntityType="Self.Tracking" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentTBL" EntityType="Self.PaymentTBL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrackingTBL" EntityType="Self.TrackingTBL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Payment__OrderID__66603565" Association="Self.FK__Payment__OrderID__66603565">
-            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
-            <End Role="Payment" EntitySet="Payment" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Tracking__OrderI__6754599E" Association="Self.FK__Tracking__OrderI__6754599E">
-            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
-            <End Role="Tracking" EntitySet="Tracking" />
+          <AssociationSet Name="FK__CustomerU__UserI__76969D2E" Association="Self.FK__CustomerU__UserI__76969D2E">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CustomerUser" EntitySet="CustomerUser" />
           </AssociationSet>
           <AssociationSet Name="FK_ComplaintStatusID" Association="Self.FK_ComplaintStatusID">
             <End Role="ComplaintStatusLookup" EntitySet="ComplaintStatusLookup" />
@@ -318,9 +326,13 @@
             <End Role="CustomerUser" EntitySet="CustomerUser" />
             <End Role="Feedback" EntitySet="Feedback" />
           </AssociationSet>
+          <AssociationSet Name="FK_PaymentOrderID" Association="Self.FK_PaymentOrderID">
+            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
+            <End Role="PaymentTBL" EntitySet="PaymentTBL" />
+          </AssociationSet>
           <AssociationSet Name="FK_PaymentStatusID" Association="Self.FK_PaymentStatusID">
             <End Role="PaymentStatusLookup" EntitySet="PaymentStatusLookup" />
-            <End Role="Payment" EntitySet="Payment" />
+            <End Role="PaymentTBL" EntitySet="PaymentTBL" />
           </AssociationSet>
           <AssociationSet Name="FK_PickupAddressID" Association="Self.FK_PickupAddressID">
             <End Role="Address" EntitySet="Address" />
@@ -330,9 +342,13 @@
             <End Role="Address" EntitySet="Address" />
             <End Role="CustomerOrders" EntitySet="CustomerOrders" />
           </AssociationSet>
+          <AssociationSet Name="FK_TrackingOrderID" Association="Self.FK_TrackingOrderID">
+            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
+            <End Role="TrackingTBL" EntitySet="TrackingTBL" />
+          </AssociationSet>
           <AssociationSet Name="FK_TrackOrderStatusID" Association="Self.FK_TrackOrderStatusID">
             <End Role="OrderStatusLookup" EntitySet="OrderStatusLookup" />
-            <End Role="Tracking" EntitySet="Tracking" />
+            <End Role="TrackingTBL" EntitySet="TrackingTBL" />
           </AssociationSet>
           <AssociationSet Name="FK_UserIDProfile" Association="Self.FK_UserIDProfile">
             <End Role="Users" EntitySet="Users" />
@@ -404,9 +420,9 @@
           <Property Name="OrderValue" Type="Double" Nullable="false" />
           <NavigationProperty Name="Address" Relationship="Self.FK_PickupAddressID" FromRole="CustomerOrders" ToRole="Address" />
           <NavigationProperty Name="Address1" Relationship="Self.FK_ShippingAddressID" FromRole="CustomerOrders" ToRole="Address" />
-          <NavigationProperty Name="Payments" Relationship="Self.FK__Payment__OrderID__66603565" FromRole="CustomerOrders" ToRole="Payment" />
-          <NavigationProperty Name="Trackings" Relationship="Self.FK__Tracking__OrderI__6754599E" FromRole="CustomerOrders" ToRole="Tracking" />
           <NavigationProperty Name="CustomerUser" Relationship="Self.FK_CustomerID" FromRole="CustomerOrders" ToRole="CustomerUser" />
+          <NavigationProperty Name="PaymentTBLs" Relationship="CMSModel.FK_PaymentOrderID" FromRole="CustomerOrder" ToRole="PaymentTBL" />
+          <NavigationProperty Name="TrackingTBLs" Relationship="CMSModel.FK_TrackingOrderID" FromRole="CustomerOrder" ToRole="TrackingTBL" />
         </EntityType>
         <EntityType Name="CustomerUser">
           <Key>
@@ -418,6 +434,7 @@
           <NavigationProperty Name="Complaints" Relationship="Self.FK_CustomerIDComplaint" FromRole="CustomerUser" ToRole="Complaint" />
           <NavigationProperty Name="CustomerOrders" Relationship="Self.FK_CustomerID" FromRole="CustomerUser" ToRole="CustomerOrders" />
           <NavigationProperty Name="Feedbacks" Relationship="Self.FK_CustomerIDFeedback" FromRole="CustomerUser" ToRole="Feedback" />
+          <NavigationProperty Name="User" Relationship="CMSModel.FK__CustomerU__UserI__76969D2E" FromRole="CustomerUser" ToRole="User" />
         </EntityType>
         <EntityType Name="Feedback">
           <Key>
@@ -434,19 +451,7 @@
           </Key>
           <Property Name="OrderStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Trackings" Relationship="Self.FK_TrackOrderStatusID" FromRole="OrderStatusLookup" ToRole="Tracking" />
-        </EntityType>
-        <EntityType Name="Payment">
-          <Key>
-            <PropertyRef Name="PaymentID" />
-          </Key>
-          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
-          <Property Name="PaymentStatusID" Type="Int32" Nullable="false" />
-          <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CustomerOrder" Relationship="Self.FK__Payment__OrderID__66603565" FromRole="Payment" ToRole="CustomerOrders" />
-          <NavigationProperty Name="PaymentStatusLookup" Relationship="Self.FK_PaymentStatusID" FromRole="Payment" ToRole="PaymentStatusLookup" />
+          <NavigationProperty Name="TrackingTBLs" Relationship="CMSModel.FK_TrackOrderStatusID1" FromRole="OrderStatusLookup" ToRole="TrackingTBL" />
         </EntityType>
         <EntityType Name="PaymentStatusLookup">
           <Key>
@@ -454,19 +459,7 @@
           </Key>
           <Property Name="PaymentStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Payments" Relationship="Self.FK_PaymentStatusID" FromRole="PaymentStatusLookup" ToRole="Payment" />
-        </EntityType>
-        <EntityType Name="Tracking">
-          <Key>
-            <PropertyRef Name="TrackingID" />
-          </Key>
-          <Property Name="TrackingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PickupBranchID" Type="Int32" />
-          <Property Name="ShippingBranchID" Type="Int32" />
-          <Property Name="OrderStatusID" Type="Int32" Nullable="false" />
-          <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CustomerOrder" Relationship="Self.FK__Tracking__OrderI__6754599E" FromRole="Tracking" ToRole="CustomerOrders" />
-          <NavigationProperty Name="OrderStatusLookup" Relationship="Self.FK_TrackOrderStatusID" FromRole="Tracking" ToRole="OrderStatusLookup" />
+          <NavigationProperty Name="PaymentTBLs" Relationship="CMSModel.FK_PaymentStatusID1" FromRole="PaymentStatusLookup" ToRole="PaymentTBL" />
         </EntityType>
         <EntityType Name="UserProfile">
           <Key>
@@ -500,6 +493,7 @@
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="UserProfiles" Relationship="Self.FK_UserIDProfile" FromRole="Users" ToRole="UserProfile" />
+          <NavigationProperty Name="CustomerUsers" Relationship="CMSModel.FK__CustomerU__UserI__76969D2E" FromRole="User" ToRole="CustomerUser" />
         </EntityType>
         <Association Name="FK_PickupAddressID">
           <End Role="Address" Type="Self.Address" Multiplicity="1" />
@@ -549,30 +543,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Payment__OrderID__66603565">
-          <End Role="CustomerOrders" Type="Self.CustomerOrder" Multiplicity="1" />
-          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerOrders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="Payment">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Tracking__OrderI__6754599E">
-          <End Role="CustomerOrders" Type="Self.CustomerOrder" Multiplicity="1" />
-          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerOrders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="Tracking">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerID">
           <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="1" />
           <End Role="CustomerOrders" Type="Self.CustomerOrder" Multiplicity="*" />
@@ -594,30 +564,6 @@
             </Principal>
             <Dependent Role="Feedback">
               <PropertyRef Name="CustomerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TrackOrderStatusID">
-          <End Role="OrderStatusLookup" Type="Self.OrderStatusLookup" Multiplicity="1" />
-          <End Role="Tracking" Type="Self.Tracking" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OrderStatusLookup">
-              <PropertyRef Name="OrderStatusID" />
-            </Principal>
-            <Dependent Role="Tracking">
-              <PropertyRef Name="OrderStatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PaymentStatusID">
-          <End Role="PaymentStatusLookup" Type="Self.PaymentStatusLookup" Multiplicity="1" />
-          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PaymentStatusLookup">
-              <PropertyRef Name="PaymentStatusID" />
-            </Principal>
-            <Dependent Role="Payment">
-              <PropertyRef Name="PaymentStatusID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -654,9 +600,7 @@
           <EntitySet Name="CustomerUsers" EntityType="Self.CustomerUser" />
           <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
           <EntitySet Name="OrderStatusLookups" EntityType="Self.OrderStatusLookup" />
-          <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="PaymentStatusLookups" EntityType="Self.PaymentStatusLookup" />
-          <EntitySet Name="Trackings" EntityType="Self.Tracking" />
           <EntitySet Name="UserProfiles" EntityType="Self.UserProfile" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -676,14 +620,6 @@
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
             <End Role="Complaint" EntitySet="Complaints" />
           </AssociationSet>
-          <AssociationSet Name="FK__Payment__OrderID__66603565" Association="Self.FK__Payment__OrderID__66603565">
-            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
-            <End Role="Payment" EntitySet="Payments" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Tracking__OrderI__6754599E" Association="Self.FK__Tracking__OrderI__6754599E">
-            <End Role="CustomerOrders" EntitySet="CustomerOrders" />
-            <End Role="Tracking" EntitySet="Trackings" />
-          </AssociationSet>
           <AssociationSet Name="FK_CustomerID" Association="Self.FK_CustomerID">
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
             <End Role="CustomerOrders" EntitySet="CustomerOrders" />
@@ -691,14 +627,6 @@
           <AssociationSet Name="FK_CustomerIDFeedback" Association="Self.FK_CustomerIDFeedback">
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
             <End Role="Feedback" EntitySet="Feedbacks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TrackOrderStatusID" Association="Self.FK_TrackOrderStatusID">
-            <End Role="OrderStatusLookup" EntitySet="OrderStatusLookups" />
-            <End Role="Tracking" EntitySet="Trackings" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PaymentStatusID" Association="Self.FK_PaymentStatusID">
-            <End Role="PaymentStatusLookup" EntitySet="PaymentStatusLookups" />
-            <End Role="Payment" EntitySet="Payments" />
           </AssociationSet>
           <AssociationSet Name="FK_UserIDProfile" Association="Self.FK_UserIDProfile">
             <End Role="Users" EntitySet="Users" />
@@ -708,7 +636,113 @@
             <End Role="UserRoles" EntitySet="UserRoles" />
             <End Role="UserProfile" EntitySet="UserProfiles" />
           </AssociationSet>
+          <EntitySet Name="PaymentTBLs" EntityType="CMSModel.PaymentTBL" />
+          <EntitySet Name="TrackingTBLs" EntityType="CMSModel.TrackingTBL" />
+          <AssociationSet Name="FK_TrackOrderStatusID1" Association="CMSModel.FK_TrackOrderStatusID1">
+            <End Role="OrderStatusLookup" EntitySet="OrderStatusLookups" />
+            <End Role="TrackingTBL" EntitySet="TrackingTBLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentStatusID1" Association="CMSModel.FK_PaymentStatusID1">
+            <End Role="PaymentStatusLookup" EntitySet="PaymentStatusLookups" />
+            <End Role="PaymentTBL" EntitySet="PaymentTBLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentOrderID" Association="CMSModel.FK_PaymentOrderID">
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+            <End Role="PaymentTBL" EntitySet="PaymentTBLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TrackingOrderID" Association="CMSModel.FK_TrackingOrderID">
+            <End Role="CustomerOrder" EntitySet="CustomerOrders" />
+            <End Role="TrackingTBL" EntitySet="TrackingTBLs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CustomerU__UserI__76969D2E" Association="CMSModel.FK__CustomerU__UserI__76969D2E">
+            <End Role="User" EntitySet="Users" />
+            <End Role="CustomerUser" EntitySet="CustomerUsers" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PaymentTBL">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentStatusID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PaymentStatusLookup" Relationship="CMSModel.FK_PaymentStatusID1" FromRole="PaymentTBL" ToRole="PaymentStatusLookup" />
+          <NavigationProperty Name="CustomerOrder" Relationship="CMSModel.FK_PaymentOrderID" FromRole="PaymentTBL" ToRole="CustomerOrder" />
+        </EntityType>
+        <EntityType Name="TrackingTBL">
+          <Key>
+            <PropertyRef Name="TrackingID" />
+          </Key>
+          <Property Name="TrackingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PickupBranchID" Type="Int32" />
+          <Property Name="ShippingBranchID" Type="Int32" />
+          <Property Name="OrderStatusID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderStatusLookup" Relationship="CMSModel.FK_TrackOrderStatusID1" FromRole="TrackingTBL" ToRole="OrderStatusLookup" />
+          <NavigationProperty Name="CustomerOrder" Relationship="CMSModel.FK_TrackingOrderID" FromRole="TrackingTBL" ToRole="CustomerOrder" />
+        </EntityType>
+        <Association Name="FK_TrackOrderStatusID1">
+          <End Type="CMSModel.OrderStatusLookup" Role="OrderStatusLookup" Multiplicity="1" />
+          <End Type="CMSModel.TrackingTBL" Role="TrackingTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatusLookup">
+              <PropertyRef Name="OrderStatusID" />
+            </Principal>
+            <Dependent Role="TrackingTBL">
+              <PropertyRef Name="OrderStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentStatusID1">
+          <End Type="CMSModel.PaymentStatusLookup" Role="PaymentStatusLookup" Multiplicity="1" />
+          <End Type="CMSModel.PaymentTBL" Role="PaymentTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentStatusLookup">
+              <PropertyRef Name="PaymentStatusID" />
+            </Principal>
+            <Dependent Role="PaymentTBL">
+              <PropertyRef Name="PaymentStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentOrderID">
+          <End Type="CMSModel.CustomerOrder" Role="CustomerOrder" Multiplicity="1" />
+          <End Type="CMSModel.PaymentTBL" Role="PaymentTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrder">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="PaymentTBL">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TrackingOrderID">
+          <End Type="CMSModel.CustomerOrder" Role="CustomerOrder" Multiplicity="1" />
+          <End Type="CMSModel.TrackingTBL" Role="TrackingTBL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerOrder">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="TrackingTBL">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CustomerU__UserI__76969D2E">
+          <End Type="CMSModel.User" Role="User" Multiplicity="1" />
+          <End Type="CMSModel.CustomerUser" Role="CustomerUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CustomerUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -797,33 +831,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="CMSModel.Payment">
-              <MappingFragment StoreEntitySet="Payment">
-                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
-                <ScalarProperty Name="PaymentStatusID" ColumnName="PaymentStatusID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PaymentStatusLookups">
             <EntityTypeMapping TypeName="CMSModel.PaymentStatusLookup">
               <MappingFragment StoreEntitySet="PaymentStatusLookup">
                 <ScalarProperty Name="PaymentStatusID" ColumnName="PaymentStatusID" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Trackings">
-            <EntityTypeMapping TypeName="CMSModel.Tracking">
-              <MappingFragment StoreEntitySet="Tracking">
-                <ScalarProperty Name="TrackingID" ColumnName="TrackingID" />
-                <ScalarProperty Name="PickupBranchID" ColumnName="PickupBranchID" />
-                <ScalarProperty Name="ShippingBranchID" ColumnName="ShippingBranchID" />
-                <ScalarProperty Name="OrderStatusID" ColumnName="OrderStatusID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -856,6 +868,28 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentTBLs">
+            <EntityTypeMapping TypeName="CMSModel.PaymentTBL">
+              <MappingFragment StoreEntitySet="PaymentTBL">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="PaymentStatusID" ColumnName="PaymentStatusID" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackingTBLs">
+            <EntityTypeMapping TypeName="CMSModel.TrackingTBL">
+              <MappingFragment StoreEntitySet="TrackingTBL">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="OrderStatusID" ColumnName="OrderStatusID" />
+                <ScalarProperty Name="ShippingBranchID" ColumnName="ShippingBranchID" />
+                <ScalarProperty Name="PickupBranchID" ColumnName="PickupBranchID" />
+                <ScalarProperty Name="TrackingID" ColumnName="TrackingID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

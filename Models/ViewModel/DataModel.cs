@@ -64,10 +64,10 @@ namespace CMSProject.Models.ViewModel
         [Required(ErrorMessage = "Pickup Address is required.")]
         public string PickupAddressSA { get; set; }
         [Display(Name = "City:")]
-        [Required(ErrorMessage = "City is required.")]
+        [Required(ErrorMessage = " ")]
         public string PickupAddressCity { get; set; }
         [Display(Name = "State:")]
-        [Required(ErrorMessage = "State is required.")]
+        [Required(ErrorMessage = " ")]
         public string PickupAddressState { get; set; }
         [Display(Name = "Pincode:")]
         [Required(ErrorMessage = "Pincode is required.")]
@@ -77,10 +77,10 @@ namespace CMSProject.Models.ViewModel
         [Required(ErrorMessage = "Shipping Address is required.")]
         public string ShippingAddressSA { get; set; }
         [Display(Name = "City:")]
-        [Required(ErrorMessage = "City is required.")]
+        [Required(ErrorMessage = " ")]
         public string ShippingAddressCity { get; set; }
         [Display(Name = "State:")]
-        [Required(ErrorMessage = "State is required.")]
+        [Required(ErrorMessage = " ")]
         public string ShippingAddressState { get; set; }
         [Display(Name = "Pincode:")]
         [Required(ErrorMessage = "Pincode is required.")]
@@ -89,6 +89,7 @@ namespace CMSProject.Models.ViewModel
         [Required(ErrorMessage = "Order weight is required.")]
         public double Weight { get; set; }
         [Display(Name = "Order Price:")]
+        [Required]
         public double OrderValue { get; set; }
         public int PaymentID { get; set; }
         public double PaymentValue { get; set; }
@@ -135,19 +136,26 @@ namespace CMSProject.Models.ViewModel
     {
         //Orders
         public int OrderID { get; set; }
-        public Nullable<System.DateTime> ShippedDate { get; set; }
+        public int CustomerID { get; set; }
+        public DateTime OrderDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? ShippedDate { get; set; }
         public int PickupAddressID { get; set; }
         public int ShippingAddressID { get; set; }
+        public double Weight { get; set; }
+        public double OrderValue { get; set; }
 
         //Tracking
         public int TrackingID { get; set; }
+        [Required(ErrorMessage = "Pick Up Branch is required.")]
         public int PickupBranchID { get; set; }
+        [Required(ErrorMessage = "Shipping Branch is required.")]
         public int ShippingBranchID { get; set; }
         public int OrderStatusID { get; set; }
 
         //Payment
         public int PaymentID { get; set; }
-        public Nullable<System.DateTime> PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
         public int PaymentStatusID { get; set; }
 
         //Extras
@@ -155,4 +163,5 @@ namespace CMSProject.Models.ViewModel
         public string ShippingAddress { get; set; }
         public List<BranchesView> Branches { get; set; }
     }
+
 }

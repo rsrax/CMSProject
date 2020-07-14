@@ -10,7 +10,25 @@
 
     <div class="form-horizontal container-fluid">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
         @Html.HiddenFor(model => model.OrderID)
+        @Html.HiddenFor(model => model.CustomerID)
+        @Html.HiddenFor(model => model.OrderDate)
+        @Html.HiddenFor(model => model.Weight)
+        @Html.HiddenFor(model => model.OrderValue)
+
+        @Html.HiddenFor(model => model.PaymentID)
+        @Html.HiddenFor(model => model.PickupAddress)
+        @Html.HiddenFor(model => model.ShippingAddress)
+        @Html.HiddenFor(model => model.PickupAddressID)
+        @Html.HiddenFor(model => model.ShippingAddressID)
+
+
+        @Html.HiddenFor(model => model.TrackingID)
+
+
+        @Html.HiddenFor(model => model.Branches)
         <div class="row justify-content-md-center" style="margin-top: 25px;">
             <div class="col-md-6">
                 <div class="form-group">
@@ -22,7 +40,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.PickupBranchID, htmlAttributes: new { @class = "control-label col-md-6" })
                     <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.PickupBranchID, new SelectList(Model.Branches, "BranchID", "Pincode"),"Select a Branch", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.PickupBranchID, new SelectList(Model.Branches, "BranchID", "Pincode"), "Select a Branch", new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -55,9 +73,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ShippingAddressID, htmlAttributes: new { @class = "control-label col-md-6" })
+                    @Html.LabelFor(model => model.ShippingBranchID, htmlAttributes: new { @class = "control-label col-md-6" })
                     <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.ShippingAddressID, new SelectList(Model.Branches, "BranchID", "Pincode"),"Select a Branch", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.ShippingBranchID, new SelectList(Model.Branches, "BranchID", "Pincode"), "Select a Branch", new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group">

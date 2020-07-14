@@ -10,16 +10,14 @@
     <thead class="text-white">
         <tr>
             <th>Order ID</th>
-            <th>Customer Name</th>
             <th>Order Date</th>
             <th>Shipped Date</th>
             <th>Pickup Address</th>
             <th>Shipping Address</th>
             <th>Weight</th>
             <th>Order Value</th>
-            <th>Payment Status</th>
+            <th>Payment ID</th>
             <th>Tracking ID</th>
-            <th>Order Status</th>
             <th></th>
         </tr>
     </thead>
@@ -36,22 +34,48 @@
                             },
                             "columns": [
                                 { "data": "OrderID" },
-                                { "data": "CustomerName" },
                                 { "data": "OrderDate" },
-                                { "data": "ShippedDate" },
-                                { "data": "PickupAddress" },
-                                { "data": "ShippingAddress" },
-                                { "data": "Weight" },
-                                { "data": "OrderValue" },
-                                { "data": "PaymentStatus" },
+                                {
+                                    "data": "ShippedDate",
+                                    "render": function (data) {
+                                        if (data == null)
+                                            return "Not Shipped";
+                                        else
+                                            return data;
+                                    }
+                                },
+                                {
+                                    "data": "PickupAddress",
+                                    "width":"150px"
+                                },
+                                {
+                                    "data": "ShippingAddress",
+                                    "width":"150px"
+                                },
+                                {
+                                    "data": "Weight",
+                                    "render": function (data) {
+                                        data = data + " kg";
+                                        return data;
+                                    }
+                                },
+                                {
+                                    "data": "OrderValue",
+                                    "render": function (data) {
+                                        data = "₹ " + data;
+                                        return data;
+                                    }
+                                },
+                                { "data": "PaymentID" },
                                 { "data": "TrackingID" },
-                                { "data": "OrderStatus" },
                                 {
                                     "data": "OrderID",
                                     "render": function (data) {
-                                        return "<button class='btn btn-primary btn-sm' onclick=PopUpForm('@Url.Action("Track","CUser")/" + data + "')>Edit</button>";
+                                        return "<button class='btn btn-primary btn-sm' onclick=PopUpForm('@Url.Action("Track","CUser")/" + data + "')>Status</button> <button class='btn btn-primary btn-sm' onclick=PopUpForm('@Url.Action("Invoice","CUser")/" + data + "')>Invoice</button>";
                                     },
-                                    "width":"50px",
+                                    "orderable": false,
+                                    "searchable": false,
+                                    "width":"140px",
                                 }
                             ]
                         });
