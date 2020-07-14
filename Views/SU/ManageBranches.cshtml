@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "ManageBranches";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage Branches</h2>
+<button type="button" class="btn btn-success btn-sm" style="margin-bottom:10px;" onclick="PopUpForm('@Url.Action("AddOrEditB","SU")')">Add New</button>
+<table id="BranchDetailsTable" class="table table-hover table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>Branch ID</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Pincode</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#BranchDetailsTable').DataTable({
+                "ajax": {
+                    "url": "/SU/GetAllBranchDetails",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "BranchID" },
+                    { "data": "StreetAddress" },
+                    { "data": "City" },
+                    { "data": "State" },
+                    { "data": "Pincode" },
+                    { "data": "Active" },
+                    { "data": "BranchID", "render" : function (data) {
+                        return "<button class='btn btn-primary btn-sm' onclick=PopUpForm('@Url.Action("AddOrEditB","SU")/" + data + "')>Edit</button><button class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")>Delete</button>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width": "120px"
+                    }
+                ],
+            });
+        });
+        function PopUpForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    popup = formDiv.dialog({
+                        autoResize: true,
+                        autoOpen: true,
+                        draggable: false,
+                        modal: true,
+                        resizable: false,
+                        title: 'Add/Edit Branch Details',
+                        width: 700,
+                        close: function () {
+                            popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form)
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            popup.dialog('close');
+                        }
+                        datatable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                })
+            }
+            return false;
+        }
+
+        function Delete(id) {
+            if(confirm('Are You Sure to Delete this Branch?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteB","SU")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            datatable.ajax.reload();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "ManageEmployees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage Employees</h2>
+
+<button type="button" class="btn btn-success btn-sm" style="margin-bottom:10px;" onclick="PopUpForm('@Url.Action("AddOrEdit","SU")')">Add New</button>
+<table id="EmployeeTable" class="table table-hover table-sm table-dark text-dark" >
+    <thead class="text-white">
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Birthdate</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    
+    <script>
+        var popup, datatable,flag;
+        $(document).ready(function () {
+            datatable = $('#EmployeeTable').DataTable({
+                            "ajax": {
+                                "url": "/SU/GetAllUserProfiles",
+                                "type": "GET",
+                                "datatype": "json"
+                            },
+                            "columns": [
+                                { "data": "UserID" },
+                                { "data": "Username" },
+                                { "data": "Password" },
+                                { "data": "FirstName" },
+                                { "data": "LastName" },
+                                { "data": "Gender" },
+                                {
+                                    "data": "BirthDate", "stype": "date ",
+                                },
+                                { "data": "Mobile" },
+                                { "data": "Email" },
+                                { "data": "UserProfileID", "render" : function (data) {
+                                    return "<button class='btn btn-primary btn-sm' onclick=PopUpForm('@Url.Action("AddOrEdit","SU")/" + data + "')>Edit</button><button class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")>Delete</button>";
+                                },
+                                    "orderable": false,
+                                    "searchable":false,
+                                    "width": "120px"
+                                }
+                            ]
+                        });
+        });
+
+        function Delete(id) {
+            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","SU")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            datatable.ajax.reload();
+                        }
+                    }
+                });
+            }
+        }
+
+        function PopUpForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    popup = formDiv.dialog({
+                        autoOpen: true,
+                        draggable: false,
+                        modal: true,
+                        resizable: false,
+                        title: 'Add/Edit Employee Details',
+                        height: 650,
+                        width: 825,
+                        close: function () {
+                            popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+
+        function CheckAvailability() {
+            var username = $("#Username").val();
+            var userid = $("#UserID").val();
+            $.ajax({
+                type: "POST",
+                url: "/Account/CheckUsername/" + userid,
+                data: '{username: "' + username + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var message = $("#Message");
+                    if (response) {
+                        //Email available.
+                        return 1;
+                    }
+                    else {
+                        //Email not available.
+                        return 0;
+                    }
+                }
+            });
+
+        };
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form)
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            popup.dialog('close');
+                        }
+                        datatable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                })
+            }
+            return false;
+        }
+
+    </script>
+}

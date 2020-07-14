@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "ViewFeedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Feedback</h2>
+
+<table id="FeedbackTable" class="table table-hover table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#FeedbackTable').DataTable({
+                "ajax": {
+                    "url": "/SU/GetAllFeedbacks",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "CustomerID" },
+                    { "data": "CustomerName" },
+                    {
+                        "data": "Description",
+                        "width": "500px",
+                    },
+                ],
+            });
+        });
+    </script>
+}

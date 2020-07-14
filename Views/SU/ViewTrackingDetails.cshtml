@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "ViewTrackingDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tracking Details</h2>
+
+<table id="TrackingDetailsTable" class="table table-hover table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>Tracking ID</th>
+            <th>Pickup Branch</th>
+            <th>Shipping Branch</th>
+            <th>Order Status</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#TrackingDetailsTable').DataTable({
+                "ajax": {
+                    "url": "/SU/GetAllTrackingDetails",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "TrackingID" },
+                    { "data": "PickupBranch" },
+                    { "data": "ShippingBranch" },
+                    { "data": "OrderStatus" },
+                ],
+            });
+        });
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿<nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="@Url.Action("Index","Home")">QuickDoCoo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto nav-pills">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Hi, @Context.User.Identity.Name!</a>
+                <div class="dropdown-menu" style="">
+                    <a class="dropdown-item" href="@Url.Action("ManageEmployees","SU")">Employees</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewCustomers","SU")">Customers</a>
+                    <a class="dropdown-item" href="@Url.Action("ManageBranches","SU")">Branches</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewOrders","SU")">Order Details</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewPaymentDetails","SU")">Payment Details</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewTrackingDetails","SU")">Tracking Details</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewFeedback","SU")">Customer Feedback</a>
+                    <a class="dropdown-item" href="@Url.Action("ViewComplaints","SU")">Customer Complaints</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index","Home")">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <a class="btn btn-primary" href="@Url.Action("SignOut","Account")">Sign Out<span class="sr-only">(current)</span></a>
+        </form>
+    </div>
+</nav>

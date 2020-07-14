@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Complaint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Complaints</h2>
+<button type="button" class="btn btn-info btn-sm" style="margin-bottom:10px;" onclick="PopUpForm('@Url.Action("MakeComplaint","CUser")')">Add New</button>
+<table id="ComplaintsTable" class="table table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>Complaint ID</th>
+            <th>Customer ID</th>
+            <th>Employee ID</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script src="~/Scripts/notify.js"></script>
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#ComplaintsTable').DataTable({
+                "ajax": {
+                    "url": "/CUser/GetMYComplaints",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ComplaintID" },
+                    { "data": "CustomerID" },
+                    {
+                        "data": "EmployeeID",
+                        "render": function (data) {
+                            if (data == 0)
+                                return "Not Assigned";
+                            else
+                                return data;
+                        }
+                    },
+                    {
+                        "data": "Description",
+                        "width": "500px",
+                    },
+                    { "data": "ComplaintStatus" },
+                ],
+                "rowCallback": function (row, data, index) {
+                    if (data.ComplaintStatus == 'Resolved') {
+                        $(row).addClass("table-success")
+                    }
+                    else if (data.ComplaintStatus == 'Unresolved') {
+                        $(row).addClass("table-danger")
+                    }
+                }
+            });
+        });
+        function PopUpForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    popup = formDiv.dialog({
+                        autoOpen: true,
+                        draggable: false,
+                        modal: true,
+                        resizable: false,
+                        title: 'Make a Complaint',
+                        height: 400,
+                        width: 500,
+                        close: function () {
+                            popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form)
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            popup.dialog('close');
+                        }
+                        datatable.ajax.reload();
+                        
+                    }
+                })
+            }
+            return false;
+        }
+    </script>
+}

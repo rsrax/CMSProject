@@ -1,0 +1,88 @@
+﻿@model CMSProject.Models.ViewModel.OrderUpdateView
+@{
+    ViewBag.Title = "UpdateOrder";
+    Layout = null;
+}
+
+@using (Html.BeginForm("UpdateOrders", "Employee", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal container-fluid">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.OrderID)
+        <div class="row justify-content-md-center" style="margin-top: 25px;">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PickupAddress, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-12">
+                        @Html.DisplayFor(model => model.PickupAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PickupBranchID, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.PickupBranchID, new SelectList(Model.Branches, "BranchID", "Pincode"),"Select a Branch", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OrderStatusID, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.OrderStatusID, new List<SelectListItem> {
+                            new SelectListItem { Text="Unconfirmed", Value="0" },
+                            new SelectListItem { Text="Confirmed", Value="1" },
+                            new SelectListItem { Text="Picked Up", Value="2" },
+                            new SelectListItem { Text="In Transit", Value="3" },
+                            new SelectListItem { Text="Shipped", Value="4" },
+                            new SelectListItem { Text="Delivered", Value="5" },
+                            new SelectListItem { Text="Cancelled", Value="6" }
+                        }, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentDate, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.PaymentDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.PaymentDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShippingAddress, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-12">
+                        @Html.DisplayFor(model => model.ShippingAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShippingAddressID, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.ShippingAddressID, new SelectList(Model.Branches, "BranchID", "Pincode"),"Select a Branch", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentStatusID, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.PaymentStatusID, new List<SelectListItem> {
+                            new SelectListItem { Text="Processing", Value="1" },
+                            new SelectListItem { Text="Recieved", Value="2" },
+                            new SelectListItem { Text="Refunded", Value="3" }
+                        }, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.ShippedDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 25px; text-align:center;">
+            <div class="form-group col-md-12">
+                <input type="submit" value="Update" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    </div>
+}

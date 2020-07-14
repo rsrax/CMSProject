@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "ViewCustomers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customers</h2>
+
+<table id="CustomerTable" class="table table-hover table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Birthdate</th>
+            <th>Mobile</th>
+            <th>Email</th>
+            <th>Active</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            datatable = $('#CustomerTable').DataTable({
+                            "ajax": {
+                                "url": "/SU/GetAllCustomerProfiles",
+                                "type": "GET",
+                                "datatype": "json"
+                            },
+                            "columns": [
+                                { "data": "UserID" },
+                                { "data": "Username" },
+                                { "data": "FirstName" },
+                                { "data": "LastName" },
+                                { "data": "Gender" },
+                                {
+                                    "data": "BirthDate", "stype": "date ",
+                                },
+                                { "data": "Mobile" },
+                                { "data": "Email" },
+                                { "data": "Active" }
+                            ]
+                        });
+        });
+    </script>
+}

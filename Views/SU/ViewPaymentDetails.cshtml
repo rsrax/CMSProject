@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "ViewPaymentDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Payment Details</h2>
+
+<table id="PaymentDetailsTable" class="table table-hover table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>                 
+            <th>Payment ID</th>
+            <th>Value</th>
+            <th>Payment Date</th>
+            <th>Payment Status</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#PaymentDetailsTable').DataTable({
+                "ajax": {
+                    "url": "/SU/GetAllPaymentDetails",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "PaymentID" },
+                    { "data": "Value" },
+                    { "data": "PaymentDate" },
+                    { "data": "PaymentStatus" },
+                ],
+            });
+        });
+    </script>
+}

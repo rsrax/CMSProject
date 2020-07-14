@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "ViewComplaints";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Complaints</h2>
+
+<table id="ComplaintsTable" class="table table-sm table-dark text-dark">
+    <thead class="text-white">
+        <tr>
+            <th>Complaint ID</th>
+            <th>Customer ID</th>
+            <th>Employee ID</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+
+@section scripts{
+    <script>
+        var popup, datatable;
+        $(document).ready(function () {
+            datatable = $('#ComplaintsTable').DataTable({
+                "ajax": {
+                    "url": "/SU/GetAllComplaints",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ComplaintID" },
+                    { "data": "CustomerID" },
+                    { "data": "EmployeeID" },
+                    {
+                        "data": "Description",
+                        "width": "500px",
+                    },
+                    { "data": "ComplaintStatus" },
+                ],
+                "rowCallback": function (row, data, index) {
+                    if (data.ComplaintStatus == 'Resolved') {
+                        $(row).addClass("table-success")
+                    }
+                    else if (data.ComplaintStatus == 'Unresolved') {
+                        $(row).addClass("table-danger")
+                    }
+                }
+            });
+        });
+    </script>
+}

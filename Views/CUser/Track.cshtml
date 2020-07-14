@@ -1,0 +1,40 @@
+﻿@model CMSProject.Models.ViewModel.OrdersView
+
+@{
+    ViewBag.Title = "Track";
+    Layout = null;
+}
+    <h4>Tracking Status</h4>
+    <div class="progress" style="margin-top:10px">
+        <div class="progress-bar bg-success" id="OrderStatus" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="7"></div>
+        @Html.HiddenFor(model => model.OrderStatusID)
+    </div>
+    <div>
+        <p class="lead" id="TrackStat">@Html.DisplayFor(model => model.OrderStatus)</p>
+    </div>
+    <h4>Payment Status</h4>
+    <div class="progress">
+        <div class="progress-bar bg-success" id="PaymentStatus" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="7"></div>
+        @Html.HiddenFor(model => model.PaymentStatusID)
+    </div>
+    <div>
+        <p class="lead" id="PayStat">@Html.DisplayFor(model => model.PaymentStatus)</p>
+    </div>
+
+
+<script>
+    $(document).ready(function () {
+        console.log("ready!");
+        updateProgress();
+    });
+    function updateProgress() {
+        var tStatus = $("#OrderStatusID").val();
+        var trackStatus = document.getElementById("OrderStatus");
+        console.log(tStatus + " " + ((tStatus*1 + 1) * 16.67) + "%");
+        trackStatus.style.width = ((tStatus * 1 + 1) * 16.67) + "%";
+        var pStatus = $("#PaymentStatusID").val();
+        var payStatus = document.getElementById("PaymentStatus");
+        console.log(pStatus + " " + ((pStatus * 1) * 33.34) + "%");
+        payStatus.style.width = ((pStatus * 1) * 33.34) + "%";
+    } 
+</script>
